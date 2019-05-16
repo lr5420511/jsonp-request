@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>domain-request example</title>
+</head>
+
+<body>
+    <input id="inpText" type="text" />
+    <button id="btnTest">Click me!</button>
+    <div id="container"></div>
+    <script type="text/javascript" src="./build/domain-request.build.js"></script>
+    <script type="text/javascript">
+        var inpText = document.getElementById('inpText');
+        var btnClick = document.getElementById('btnTest');
+        var container = document.getElementById('container');
+        btnClick.addEventListener('click', function () {
+            jsonp({
+                url: 'https://www.baifubao.com/callback',
+                query: { cmd: 1059, phone: inpText.value },
+                timeout: 116,
+                cacheMode: false
+            }, function (err, res) {
+                if (err) return alert(err.message);
+                container.innerText = JSON.stringify(res) +
+                    '\n\n' +
+                    JSON.stringify(jsonp.cache);
+            });
+        });
+    </script>
+</body>
+
+</html>

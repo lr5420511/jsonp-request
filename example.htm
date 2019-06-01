@@ -21,7 +21,6 @@
             jsonp({
                 url: 'https://www.baifubao.com/callback',
                 query: { cmd: 1059, phone: inpText.value },
-                timeout: 116,
                 cacheMode: false
             }, function (err, res) {
                 if (err) return alert(err.message);

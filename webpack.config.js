@@ -6,7 +6,7 @@ const [join, CleanWP] = [
 
 module.exports = {
     entry: {
-        'domain-request': ['babel-polyfill', './src/index.js']
+        'domain-request': ['./src/index.js']
     },
     output: {
         path: join(__dirname, 'build'),

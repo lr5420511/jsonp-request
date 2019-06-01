@@ -4,12 +4,13 @@ const win = window;
 
 const request = async function (options) {
     const {
-        url, query, cacheMode, methodKey, adapter, timeout
-    } = Object.assign(this, {
+        url, query, cacheMode, methodKey, adapter, timeout, proxy
+    } = Object.assign(this || {}, {
             url: '/',
             query: null,
             cacheMode: true,
             methodKey: 'callback',
+            proxy: null,
             timeout: 20000,
             adapter: function () {
                 const [res, rej, err, dat] = Object.assign(
@@ -31,9 +32,20 @@ const request = async function (options) {
                     cacheMode && (cache[key] = dats);
                 }
                 delete win[methodValue];
+                proxy && (delete win[proxy]);
                 adapter(res, rej, ...dats);
             };
         if (values) return response(...values);
+        if(proxy) {
+            if(typeof win[proxy] === 'function') {
+                const err = new Error(`${proxy} proxy function is exist.`);
+                err.forecastable = true;
+                throw err;
+            }
+            win[proxy] = function() {
+                response(...arguments);    
+            };
+        } 
         const script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('async', '');

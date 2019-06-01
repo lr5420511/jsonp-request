@@ -40,7 +40,8 @@ const request = async function (options) {
             if(typeof win[proxy] === 'function') {
                 const err = new Error(`${proxy} proxy function is exist.`);
                 err.forecastable = true;
-                throw err;
+                delete win[methodValue];
+                return rej(err);
             }
             win[proxy] = function() {
                 response(...arguments);    

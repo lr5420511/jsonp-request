@@ -1,7 +1,9 @@
 'use strict';
 
-const [join, CleanWP] = [
-    require('path').join, require('clean-webpack-plugin')
+const [join, CleanWP, UglifyjsWP] = [
+    require('path').join, 
+    require('clean-webpack-plugin'),
+    require('uglifyjs-webpack-plugin')
 ];
 
 module.exports = {
@@ -12,14 +14,23 @@ module.exports = {
         path: join(__dirname, 'build'),
         filename: '[name].build.js'
     },
-    devtool: 'source-map',
+    devtool: false,
     module: {
         rules: [
             {
-                test: /\.js$/,
-                loaders: ['babel-loader']
+                test: /\.js$/i,
+                loaders: ['babel-loader'],
+                exclude: [/node_modules/]
             }
         ]
     },
-    plugins: [new CleanWP(['./build'])]
+    plugins: [new CleanWP(['./build'])],
+    optimization: {
+        minimizer: [
+            new UglifyjsWP({
+                test: /\.js$/i,
+                sourceMap: false
+            })
+        ]
+    }
 };
